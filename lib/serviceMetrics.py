@@ -1,21 +1,12 @@
+"""
+ServiceMetrics will call the serviceMetrics api to return the train
+identifiers for trains that have run from defined dates and times.
+"""
 import base64
 import json
 from typing import Dict
-
 import requests
 
-"""
-Service Metrics needs parameters:
-"from_loc": "BTN",
-"to_loc": "VIC",
-"from_time": "0700",
-"to_time": "0800",
-"from_date": "2016-07-01",
-"to_date": "2016-08-01",
-"days": "WEEKDAY"
-
-It wil be passed as a dictionary.
-"""
 
 # 1. Generate Service Metrics Payload
 def return_service_metrics_payload(from_loc, to_loc, from_time, to_time, from_date, to_date, days):
@@ -66,9 +57,8 @@ def get_service_metrics(service: Dict[str, str]) -> Dict:
         return response.status_code, response.text
 
 # 3. Return RIDS of Service Metrics
-def get_rid_from_metrics(metrics: Dict[str, str]) -> Dict:
+def get_rid_from_metrics(metrics: Dict[str, str]) -> list[str, str]:
     rids = []
     for service in metrics['Services']:
-        # Accessing the 'rids' from each service's 'serviceAttributesMetrics'
         rids.extend(service['serviceAttributesMetrics']['rids'])
     return rids
